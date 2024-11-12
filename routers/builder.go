@@ -7,5 +7,5 @@ import (
 )
 
 func buildWebSocket(router *gin.Engine) {
-	router.GET(controllers.ROUTER_HEALTHZ, controllers.Healthz)
+	router.GET("/", controllers.Entrypoint)
 }

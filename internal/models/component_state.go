@@ -1,9 +1,6 @@
-package events
+package models
 
-type EventData[T any] struct {
-	Event string `json:"event"`
-	Data  T      `json:"data"`
-}
+import "arcadia/internal/utils"
 
 type MoveDirection int
 
@@ -18,16 +15,11 @@ const (
 	DownRight
 )
 
-type GameVector struct {
-	X float64 `json:"x"`
-	Y float64 `json:"y"`
-}
-
-type ComponentStateModel struct {
+type ComponentState struct {
 	ID            string                 `json:"id"`
 	Name          string                 `json:"name"`
-	Position      GameVector             `json:"position"`
-	Size          GameVector             `json:"size"`
+	Position      *utils.GameVector      `json:"position"`
+	Size          *utils.GameVector      `json:"size"`
 	Life          int                    `json:"life"`
 	Speed         float64                `json:"speed"`
 	Direction     *MoveDirection         `json:"direction,omitempty"`
