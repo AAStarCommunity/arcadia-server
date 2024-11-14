@@ -3,6 +3,7 @@ package controllers
 import (
 	"arcadia/internal/events"
 	"arcadia/internal/game"
+	"arcadia/internal/game/polo"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -34,7 +35,7 @@ func Entrypoint(ctx *gin.Context) {
 			c.Done()
 		}()
 
-		newClient := game.NewPoloClient(ws)
+		newClient := polo.NewPoloClient(ws)
 
 		for {
 			mt, message, err := ws.ReadMessage()
@@ -57,6 +58,10 @@ func Entrypoint(ctx *gin.Context) {
 							if joinData, err := parseJoinEventData(eventName); err == nil {
 								go game.JoinPlayer(joinData, newClient)
 							}
+						case events.MoveEvent:
+							// if moveData, err := parseMoveEventData(eventName); err == nil {
+							// go game.MovePlayer(moveData, newClient)
+							// }
 						}
 					}
 				}
@@ -75,6 +80,15 @@ func parserMessage(message []byte) (*genericEvent, error) {
 func parseJoinEventData(ge *genericEvent) (*events.JoinEventData, error) {
 	evt := events.JoinEventData{
 		Name: ge.Event,
+	}
+	err := json.Unmarshal(ge.Data, &evt)
+
+	return &evt, err
+}
+
+func parseMoveEventData(ge *genericEvent) (*events.MoveEventData, error) {
+	evt := events.MoveEventData{
+		Time: "now",
 	}
 	err := json.Unmarshal(ge.Data, &evt)
 
